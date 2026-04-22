@@ -15,7 +15,7 @@ The short answer is no.
 
 The long answer:
 
-It’s not realistically implementable end-to-end with current LLMs and tooling because the system requires reliable long-horizon reasoning, grounded decision-making, and trustworthy self-evaluation, which today’s models don’t consistently provide. LLMs can generate code and plans, but they struggle to maintain coherent intent across multi-step workflows, especially when requirements are ambiguous or evolve. Tooling like MCP solves access to context, not context quality, trust or correctness. So the agent can easily base decisions on stale or conflicting information. Most critically, “LLM-as-a-judge” and self-validation loops are still correlated and fallible. The same model family often generates, tests, and evaluates outputs, leading to false confidence rather than true correctness. Without robust, deterministic validation, strong isolation, and human oversight at key decision points, the system would be brittle, unsafe and prone to confidently producing the wrong software.
+It’s not realistically implementable end-to-end with current LLMs and tooling because the system requires reliable long-horizon reasoning, grounded decision-making and trustworthy self-evaluation, which today’s models don’t consistently provide. LLMs can generate code and plans, but they struggle to maintain coherent intent across multi-step workflows, especially when requirements are ambiguous or evolve. Tooling like MCP solves access to context, not context quality, trust or correctness. So the agent can easily base decisions on stale or conflicting information. Most critically, “LLM-as-a-judge” and self-validation loops are still correlated and fallible. The same model family often generates, tests, and evaluates outputs, leading to false confidence rather than true correctness. Without robust, deterministic validation, strong isolation, and human oversight at key decision points, the system would be brittle, unsafe and prone to confidently producing the wrong software.
 
 ## The System Must Do
 
@@ -28,6 +28,72 @@ At a high level, the system needs to:
 - validate outcomes with evidence, not confidence
 - recover safely when validation fails
 - return control to a human at the right decision points
+
+## System Context
+
+```mermaid
+flowchart TD
+
+    A["Human Input<br/>Requirements / Feedback"] --> B["Requirement Interpreter<br/>Intent parsing<br/>Ambiguity detection<br/>Acceptance criteria"]
+
+    B --> C["Orchestrator state machine<br/>Task planning<br/>Phase control<br/>Retry and rollback<br/>Audit and memory"]
+
+    C --> D["Context Layer via MCP<br/>Confluence<br/>Git repos<br/>Local files<br/>APIs<br/>Ranked by trust and relevance"]
+
+    C --> E["Planning Layer<br/>Architecture design<br/>Task DAG<br/>Test strategy<br/>Benchmark plan"]
+
+    D --> E
+
+    E --> F["Execution Layer<br/>Code generation<br/>Refactoring<br/>Test generation<br/>Docs"]
+
+    F --> G["Verification Layer<br/>Compile / lint<br/>Unit and integration tests<br/>Runtime execution<br/>Benchmarks<br/>Security scans<br/>LLM as judge"]
+
+    G --> H{"Validation passed?"}
+
+    H -->|No| I["Recovery Loop<br/>Diagnose failures<br/>Generate fixes<br/>Retry bounded"]
+
+    I --> F
+
+    H -->|Yes| J["Delivery Layer<br/>PR or repo output<br/>Reports and summary<br/>Human review"]
+
+    C --> K["Project Memory Store<br/>Requirements<br/>Decisions<br/>Context provenance<br/>Failures and history"]
+
+    K --> C
+```
+
+## Flow Walkthrough
+
+### Step 1: Requirements to contract
+
+"We start by converting the human brief into a structured contract: goals, constraints, assumptions, and measurable acceptance criteria. This is critical because vague inputs like 'high-performance' are otherwise ambiguous."
+
+### Step 2: Orchestrator as the control brain
+
+"At the centre is an orchestrator implemented as a state machine. It manages phases like planning, execution, validation, and recovery, and it maintains persistent project memory."
+
+### Step 3: Context through MCP
+
+"We pull in external knowledge through MCP, including Confluence docs and Git repos, but we do not trust that context blindly. We rank it by freshness, authority, and relevance before using it."
+
+### Step 4: Planning layer
+
+"Before writing code, the system generates an architecture, a task DAG, a testing strategy, and a benchmark plan."
+
+### Step 5: Execution layer
+
+"Workers generate code, tests, and documentation in isolated environments, typically using branch-based or sandboxed execution."
+
+### Step 6: Verification layer
+
+"Validation is evidence-driven: compile and lint, unit and integration tests, runtime execution, performance benchmarks, security and static analysis, and only then LLM-as-a-judge."
+
+### Step 7: Recovery loop
+
+"Failures trigger a bounded retry loop where the system diagnoses issues, proposes fixes, and revalidates."
+
+### Step 8: Delivery and human review
+
+"Finally, the system outputs a PR and a report explaining decisions, tradeoffs, and evidence for correctness."
 
 ## Reference Architecture
 
@@ -78,37 +144,6 @@ At a high level, the system needs to:
     -> PR / report / design summary / release notes
     -> final human review
 
-## System Context
-
-```mermaid
-flowchart TD
-
-    A["Human Input<br/>Requirements / Feedback"] --> B["Requirement Interpreter<br/>Intent parsing<br/>Ambiguity detection<br/>Acceptance criteria"]
-
-    B --> C["Orchestrator state machine<br/>Task planning<br/>Phase control<br/>Retry and rollback<br/>Audit and memory"]
-
-    C --> D["Context Layer via MCP<br/>Confluence<br/>Git repos<br/>Local files<br/>APIs<br/>Ranked by trust and relevance"]
-
-    C --> E["Planning Layer<br/>Architecture design<br/>Task DAG<br/>Test strategy<br/>Benchmark plan"]
-
-    D --> E
-
-    E --> F["Execution Layer<br/>Code generation<br/>Refactoring<br/>Test generation<br/>Docs"]
-
-    F --> G["Verification Layer<br/>Compile / lint<br/>Unit and integration tests<br/>Runtime execution<br/>Benchmarks<br/>Security scans<br/>LLM as judge"]
-
-    G --> H{"Validation passed?"}
-
-    H -->|No| I["Recovery Loop<br/>Diagnose failures<br/>Generate fixes<br/>Retry bounded"]
-
-    I --> F
-
-    H -->|Yes| J["Delivery Layer<br/>PR or repo output<br/>Reports and summary<br/>Human review"]
-
-    C --> K["Project Memory Store<br/>Requirements<br/>Decisions<br/>Context provenance<br/>Failures and history"]
-
-    K --> C
-```
 ## End-to-End Flow
 
 ### 1. Intake and contract formation
@@ -296,37 +331,3 @@ I would avoid:
 - fully unrestricted tool access
 - using LLM judgement as the primary quality gate
 - inferring requirements without traceability
-
-## Presentation Walkthrough
-
-### Step 1: Requirements to contract
-
-"We start by converting the human brief into a structured contract: goals, constraints, assumptions, and measurable acceptance criteria. This is critical because vague inputs like 'high-performance' are otherwise ambiguous."
-
-### Step 2: Orchestrator as the control brain
-
-"At the centre is an orchestrator implemented as a state machine. It manages phases like planning, execution, validation, and recovery, and it maintains persistent project memory."
-
-### Step 3: Context through MCP
-
-"We pull in external knowledge through MCP, including Confluence docs and Git repos, but we do not trust that context blindly. We rank it by freshness, authority, and relevance before using it."
-
-### Step 4: Planning layer
-
-"Before writing code, the system generates an architecture, a task DAG, a testing strategy, and a benchmark plan."
-
-### Step 5: Execution layer
-
-"Workers generate code, tests, and documentation in isolated environments, typically using branch-based or sandboxed execution."
-
-### Step 6: Verification layer
-
-"Validation is evidence-driven: compile and lint, unit and integration tests, runtime execution, performance benchmarks, security and static analysis, and only then LLM-as-a-judge."
-
-### Step 7: Recovery loop
-
-"Failures trigger a bounded retry loop where the system diagnoses issues, proposes fixes, and revalidates."
-
-### Step 8: Delivery and human review
-
-"Finally, the system outputs a PR and a report explaining decisions, tradeoffs, and evidence for correctness."
