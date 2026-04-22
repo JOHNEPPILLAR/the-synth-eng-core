@@ -1,0 +1,21 @@
+{
+  "servers": {
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "pandoras-box": {
+      "type": "stdio",
+      "command": "go",
+      "args": [
+        "run",
+        "./mcp/pandoras-box/cmd/pandoras-box"
+      ],
+      "cwd": "${workspaceFolder}"
+    }
+  }
+}
