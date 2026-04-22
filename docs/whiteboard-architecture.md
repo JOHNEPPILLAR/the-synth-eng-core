@@ -9,7 +9,7 @@ MCP matters because it standardises access to external context and tools, but MC
 
 That means MCP is necessary, but not sufficient. The real architecture challenge is the control system layered on top of it.
 
-## Is it possible
+## Is it possible?
 
 The short answer is no.
 

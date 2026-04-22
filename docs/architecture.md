@@ -2,6 +2,8 @@
 
 This document explains what the The Synthetic Engineer core repo does, how the main parts fit together, and how work moves through the system.
 
+It also explains how `the-synth-eng-core` relates to the companion repositories `the-synth-eng-skills` and `the-synth-eng-code-ref`.
+
 ## Purpose
 
 The repository is a control plane for VS Code agent workflows. It provides:
@@ -11,6 +13,12 @@ The repository is a control plane for VS Code agent workflows. It provides:
 - reusable operational skills that define planning, review, memory, and worktree policy
 - durable repo memory templates under `.agent-memory/`
 - the `Pandora's Box` MCP server for external engineering context from Confluence and GitHub
+
+Within the broader Synthetic Engineer system, this repo is the coordinator rather than the full knowledge base. The surrounding repositories provide complementary inputs:
+
+- `the-synth-eng-core`: the control plane, agent definitions, orchestration policy, repo-local memory rules, and external-context adapter
+- `the-synth-eng-skills`: the domain-skill library that holds specialist implementation and review guidance across areas such as API design, frontend architecture, Go practices, testing, and security
+- `the-synth-eng-code-ref`: the example and pattern library that gives agents concrete reference implementations they can inspect before planning or coding
 
 The system is designed to keep responsibilities explicit:
 
@@ -37,7 +45,48 @@ flowchart LR
     InternalAgents --> PandorasBox["Pandora's Box MCP Server\nexternal engineering context"]
     PandorasBox --> GitHub["GitHub repos\nskills and code references"]
     PandorasBox --> Confluence["Confluence\nstandards and platform docs"]
+    GitHub --> EngSkills["the-synth-eng-skills\ndomain skill library"]
+    GitHub --> CodeRef["the-synth-eng-code-ref\nreference implementations"]
 ```
+
+## Repository Roles in the System
+
+The Synthetic Engineer is split across three repos on purpose so that orchestration, reusable guidance, and example implementations can evolve independently.
+
+### `the-synth-eng-core`
+
+This repo is the control plane. It owns:
+
+- user-facing and hidden agent definitions
+- workflow skills for planning, review, memory, discovery, and worktree usage
+- repo-level architecture and operating rules
+- Pandora's Box as the retrieval boundary to external context
+
+This is the repo that decides how work is routed and governed.
+
+### `the-synth-eng-skills`
+
+This repo is the domain-skill library. It owns specialist `SKILL.md` files that expand the system beyond the core operational workflow. In the current workspace it includes areas such as:
+
+- API design
+- code quality
+- frontend architecture and design
+- Go best practice and hexagonal architecture
+- Node.js, Docker, Kubernetes, and NGINX guidance
+- security and testing guidance
+- TypeScript implementation patterns
+
+The core repo does not duplicate that content. Instead, agents either read those files locally when the repo is checked out or fetch them through Pandora's Box when they are remote.
+
+### `the-synth-eng-code-ref`
+
+This repo is the implementation reference library. It contains small examples and pattern repos that agents can inspect for concrete structure before proposing or writing code. In the current workspace it includes reference areas such as:
+
+- `api-design/example` for API-oriented Go structure
+- `go-hexagonal-architecture/example` for ports-and-adapters patterns
+- `typescript-basic/example` for a small runnable TypeScript frontend example
+
+The purpose of this repo is not orchestration policy. Its role is to provide trustworthy, repo-owned examples that can anchor planning and implementation decisions.
 
 ## Core Components
 
@@ -68,6 +117,8 @@ The `skills/` directory holds operational policy and reusable workflow guidance 
 - durable memory governance
 - git worktree strategy
 
+These are the core workflow skills only. Domain-specific skills live in `the-synth-eng-skills`, which the agents consult when the task needs deeper guidance than the control-plane repo should carry inline.
+
 ### Durable memory
 
 The repo commits `.agent-memory/` as reusable templates. The files define the durable memory shape, but downstream projects populate the project-specific entries.
@@ -83,6 +134,22 @@ The repo commits `.agent-memory/` as reusable templates. The files define the du
 - GitHub repository pattern search
 
 This gives agents a structured alternative to raw web browsing for repo-owned skills, reference examples, and platform guidance.
+
+In practice, Pandora's Box is the bridge between this control-plane repo and the companion repositories when they are not already present in the local workspace.
+
+## Cross-Repo Knowledge Flow
+
+The three repositories fit together as a layered system:
+
+1. `the-synth-eng-core` decides how work should be planned, routed, reviewed, and verified.
+2. `the-synth-eng-skills` supplies specialist guidance that shapes implementation and review decisions for a particular domain.
+3. `the-synth-eng-code-ref` supplies example code and structural patterns that the planner or execution agents can reuse or adapt.
+
+This creates a deliberate separation of concerns:
+
+- policy and orchestration live in the core repo
+- reusable domain knowledge lives in the skills repo
+- concrete implementation patterns live in the reference repo
 
 ## Repository Structure
 
@@ -100,6 +167,9 @@ flowchart TD
     Agents --> Hidden["Explore, execution, review, debug, verify"]
     Skills --> Policy["planning, review, memory, worktree, discovery"]
     MCP --> PB["Pandora's Box tools"]
+    Root --> ExternalRepos["Companion repos"]
+    ExternalRepos --> SkillsRepo["the-synth-eng-skills/\ndomain SKILL.md library"]
+    ExternalRepos --> RefRepo["the-synth-eng-code-ref/\nexample implementations"]
 ```
 
 ## Request Lifecycle
@@ -253,6 +323,12 @@ Preferred retrieval order:
 3. `context7` for external library and framework documentation
 4. generic web fetch only for non-repository, non-library pages
 
+Applied to the three-repo system, that means:
+
+1. use local files from `the-synth-eng-core`, `the-synth-eng-skills`, or `the-synth-eng-code-ref` when those repos are checked out in the workspace
+2. use Pandora's Box to fetch files or patterns from `the-synth-eng-skills` and `the-synth-eng-code-ref` when they are not local
+3. use `context7` only for third-party library and framework documentation that is not repo-owned
+
 ## What the System Optimises For
 
 The design optimises for:
@@ -283,3 +359,11 @@ If you are new to the repo, read in this order:
 6. `mcp/pandoras-box/README.md`
 
 That sequence gives you the top-level model first, then the concrete routing, policy, and external-context layers.
+
+If you are trying to understand the full multi-repo system rather than only this repo, continue with:
+
+7. `../the-synth-eng-skills/skills/README.md`
+8. one or two relevant domain skill files from `the-synth-eng-skills`
+9. a matching example under `../the-synth-eng-code-ref/`
+
+That second pass shows how orchestration policy in the core repo connects to domain guidance and concrete implementation patterns in the companion repos.
