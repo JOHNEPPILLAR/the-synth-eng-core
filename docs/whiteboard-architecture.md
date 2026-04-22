@@ -78,6 +78,37 @@ At a high level, the system needs to:
     -> PR / report / design summary / release notes
     -> final human review
 
+## System Context
+
+```mermaid
+flowchart TD
+
+    A["Human Input<br/>Requirements / Feedback"] --> B["Requirement Interpreter<br/>Intent parsing<br/>Ambiguity detection<br/>Acceptance criteria"]
+
+    B --> C["Orchestrator state machine<br/>Task planning<br/>Phase control<br/>Retry and rollback<br/>Audit and memory"]
+
+    C --> D["Context Layer via MCP<br/>Confluence<br/>Git repos<br/>Local files<br/>APIs<br/>Ranked by trust and relevance"]
+
+    C --> E["Planning Layer<br/>Architecture design<br/>Task DAG<br/>Test strategy<br/>Benchmark plan"]
+
+    D --> E
+
+    E --> F["Execution Layer<br/>Code generation<br/>Refactoring<br/>Test generation<br/>Docs"]
+
+    F --> G["Verification Layer<br/>Compile / lint<br/>Unit and integration tests<br/>Runtime execution<br/>Benchmarks<br/>Security scans<br/>LLM as judge"]
+
+    G --> H{"Validation passed?"}
+
+    H -->|No| I["Recovery Loop<br/>Diagnose failures<br/>Generate fixes<br/>Retry bounded"]
+
+    I --> F
+
+    H -->|Yes| J["Delivery Layer<br/>PR or repo output<br/>Reports and summary<br/>Human review"]
+
+    C --> K["Project Memory Store<br/>Requirements<br/>Decisions<br/>Context provenance<br/>Failures and history"]
+
+    K --> C
+```
 ## End-to-End Flow
 
 ### 1. Intake and contract formation
@@ -299,35 +330,3 @@ I would avoid:
 ### Step 8: Delivery and human review
 
 "Finally, the system outputs a PR and a report explaining decisions, tradeoffs, and evidence for correctness."
-
-## System Context
-
-```mermaid
-flowchart TD
-
-    A[Human Input\nRequirements / Feedback] --> B[Requirement Interpreter\n- Intent parsing\n- Ambiguity detection\n- Acceptance criteria]
-
-    B --> C[Orchestrator (State Machine)\n- Task planning\n- Phase control\n- Retry & rollback\n- Audit & memory]
-
-    C --> D[Context Layer (via MCP)\n- Confluence\n- Git repos\n- Local files\n- APIs\n- Ranked by trust/relevance]
-
-    C --> E[Planning Layer\n- Architecture design\n- Task DAG\n- Test strategy\n- Benchmark plan]
-
-    D --> E
-
-    E --> F[Execution Layer\n- Code generation\n- Refactoring\n- Test generation\n- Docs]
-
-    F --> G[Verification Layer\n- Compile / lint\n- Unit & integration tests\n- Runtime execution\n- Benchmarks\n- Security scans\n- LLM-as-judge]
-
-    G --> H{Validation Passed?}
-
-    H -->|No| I[Recovery Loop\n- Diagnose failures\n- Generate fixes\n- Retry (bounded)]
-
-    I --> F
-
-    H -->|Yes| J[Delivery Layer\n- PR / repo output\n- Reports & summary\n- Human review]
-
-    C --> K[Project Memory Store\n- Requirements\n- Decisions\n- Context provenance\n- Failures & history]
-
-    K --> C
-```

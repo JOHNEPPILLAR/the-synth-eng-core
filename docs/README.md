@@ -4,7 +4,13 @@ This folder contains the durable reference docs for the The Synthetic Engineer c
 
 ## Documents
 
-- [architecture.md](architecture.md) - end-to-end system overview, runtime model, key components, and Mermaid diagrams.
+- [architecture.md](architecture.md) - end-to-end system overview of the core repo, including the runtime model, key components, routing model, and Mermaid diagrams.
+- [whiteboard-architecture.md](whiteboard-architecture.md) - higher-level architecture framing for discussion and presentation, including feasibility constraints, control-plane design principles, and a simplified system-context diagram.
+
+## Suggested Reading Order
+
+1. [whiteboard-architecture.md](whiteboard-architecture.md) for the higher-level narrative and presentation version.
+2. [architecture.md](architecture.md) for the canonical repo-level architecture.
 
 ## Intended Audience
 
