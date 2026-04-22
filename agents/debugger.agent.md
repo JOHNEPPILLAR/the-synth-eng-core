@@ -53,7 +53,7 @@ Follow any skills assigned by Orchestrator for domain-specific constraints (for 
 2. If reproduction fails: stop and report non-reproducible.
 3. Record:
    - reproduction steps
-   - expected vs actual behavior
+  - expected vs actual behaviour
    - exact error/stack trace
 
 Worktree note: if Orchestrator provides worktree path, work only there. Never create/remove worktrees.
@@ -124,7 +124,7 @@ Hard rule: do not end the run without a final natural-language response. If you 
 
 1. Do not act without reproduction.
 2. Do not guess/speculate.
-3. Do not perform broad refactors/optimizations/redesign.
+3. Do not perform broad refactors/optimisations/redesign.
 4. Do not overlap with reviewer responsibilities.
 5. Do not continue after non-reproducibility report.
 

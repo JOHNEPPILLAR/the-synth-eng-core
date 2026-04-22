@@ -24,7 +24,7 @@ Go **broad to narrow**:
 
 ## Parallel Discovery
 
-Parallelize only when the task has multiple mostly independent tracks.
+Parallelise only when the task has multiple mostly independent tracks.
 
 - `x1`: one primary area
 - `x2`: two clear research tracks (for example frontend + backend)

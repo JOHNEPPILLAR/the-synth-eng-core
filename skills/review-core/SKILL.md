@@ -13,7 +13,7 @@ This skill is the single source of truth for independent code-review agents that
 
 ## Scope
 
-- Analyze code only; do not implement fixes.
+- Analyse code only; do not implement fixes.
 - Focus on bugs, security, regressions, performance, and critical quality issues.
 - Reference exact file paths and line numbers whenever possible.
 
@@ -73,5 +73,5 @@ Keep it short (2–8 bullets). No long narrative.
 
 1. No code writing.
 2. No vague statements; each finding must be actionable.
-3. Prioritize correctness and risk over style preferences.
+3. Prioritise correctness and risk over style preferences.
 4. Avoid documentation-only nitpicks unless they hide a functional risk.

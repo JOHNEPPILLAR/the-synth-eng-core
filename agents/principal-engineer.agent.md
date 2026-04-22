@@ -25,13 +25,13 @@ ALWAYS use #context7 MCP Server to read relevant documentation. Do this every ti
 
 Use the Pandora's Box MCP server for GitHub-hosted repository content outside the current workspace. Prefer local workspace files first; otherwise use Pandora's Box `get_github_file_content`, `list_github_repos`, and `search_github_repo_patterns` for repos such as `JOHNEPPILLAR/the-synth-eng-skills` and `JOHNEPPILLAR/the-synth-eng-code-ref`. Do not rely on raw GitHub page browsing for skill files or code-reference content.
 
-## Skills (Dynamic Specialization)
+## Skills (Dynamic Specialisation)
 
-You are a specialized agent whose expert profile is dynamically determined by the Orchestrator.
+You are a specialised agent whose expert profile is dynamically determined by the Orchestrator.
 
 1. **Wait for Assignment**: The Orchestrator will explicitly assign you one or more skills for each task (e.g., `@skills/android/SKILL.md`).
 2. **Consult Assigned Skills**: You MUST read and follow the mandatory rules in the assigned skill files before writing code.
-3. **Prioritization**: If multiple skills are assigned, follow the priority order established by the Orchestrator.
+3. **Prioritisation**: If multiple skills are assigned, follow the priority order established by the Orchestrator.
 4. **Fallback**: If no specific skill is assigned, follow general industry best practices for the task domain (Frontend, Backend, Mobile, etc.).
 
 ## Worktree Awareness
@@ -70,8 +70,8 @@ If the Orchestrator delegates a **Terminal Preflight**:
 1. Do NOT use any implicit/chat "memory" feature to store project context.
 2. Persisted project knowledge lives only in `.agent-memory/` files and must follow `@skills/memory-management/SKILL.md`.
 3. You may update `.agent-memory/` in either case:
-   - The Orchestrator explicitly authorizes it (e.g., `ALLOW_MEMORY_UPDATE=true`), OR
-   - You completed and verified a non-trivial change that matches any Step 8 trigger (feature/behavior change, bug fix with repro, refactor/`>=2` files, CI/deps change, new invariant/decision, recurring error pattern).
+   - The Orchestrator explicitly authorises it (e.g., `ALLOW_MEMORY_UPDATE=true`), OR
+   - You completed and verified a non-trivial change that matches any Step 8 trigger (feature/behaviour change, bug fix with repro, refactor/`>=2` files, CI/deps change, new invariant/decision, recurring error pattern).
 4. If you update memory:
    - use `@skills/memory-management/SKILL.md`
    - append (don’t rewrite history)
@@ -161,12 +161,12 @@ These coding principles are mandatory:
 
 9. Quality
 
-- Favor deterministic, testable behavior.
-- Keep tests simple and focused on verifying observable behavior.
+- Favour deterministic, testable behaviour.
+- Keep tests simple and focused on verifying observable behaviour.
 
 10. Mandatory Quality Gate
 
-- Create or update unit tests for every non-trivial behavior change unless the codebase has no unit-test harness and the Orchestrator explicitly scopes tests out.
+- Create or update unit tests for every non-trivial behaviour change unless the codebase has no unit-test harness and the Orchestrator explicitly scopes tests out.
 - Do not consider implementation complete unless the relevant unit tests pass.
 - Achieve at least 80% code coverage for the changed package, module, service, or otherwise closest measurable scope when the stack tooling can report coverage.
 - Run an applicable vulnerability scan for the changed stack and do not report success if any unresolved vulnerabilities remain.

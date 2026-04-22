@@ -1,4 +1,4 @@
-# Skills Catalog
+# Skills Catalogue
 
 This repository is part of the The Synthetic Engineer system.
 

@@ -49,7 +49,7 @@ Not all 1/3 findings are false positives. Some deserve attention:
 
 - Security vulnerability with clear exploit path
 - Data loss scenario with concrete reproduction
-- Race condition with timing-dependent behavior
+- Race condition with timing-dependent behaviour
 - Edge case that requires domain-specific knowledge one model happens to have
 
 **Rule of thumb:** If a 1/3 finding has a concrete, verifiable failure scenario, treat it as medium confidence regardless of consensus.
@@ -95,7 +95,7 @@ Model C: (not flagged)
 
 1. Highest severity wins for security issues
 2. Majority severity wins for non-security issues
-3. If split 1/1/1, consolidator makes the judgment call with reasoning
+3. If split 1/1/1, consolidator makes the judgement call with reasoning
 
 ### Step 4: Assess Disagreements
 
@@ -112,7 +112,7 @@ Model B: ✅ POSITIVE — correctly excluded dependency (intentional)
 
 ## 3. Multi-Model Review Patterns
 
-### Pattern A: Breadth-Optimized Review
+### Pattern A: Breadth-Optimised Review
 
 Different review models often surface different classes of issues. Treat this as a source of broader coverage, not as a fixed stereotype or a guarantee about any specific model family.
 
@@ -136,7 +136,7 @@ Over time, track which models produce more false positives in specific domains:
 
 ### Use Multi-Model When:
 
-- Changes touch authentication, authorization, or payment logic
+- Changes touch authentication, authorisation, or payment logic
 - Refactoring core architecture or shared utilities
 - Introducing new external dependencies or APIs
 - Changes affect data persistence or migration

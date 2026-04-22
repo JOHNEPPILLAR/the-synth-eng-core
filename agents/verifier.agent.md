@@ -58,7 +58,7 @@ If verification commands are not provided, infer the smallest useful verificatio
 ### Phase 1: Determine Verification Scope
 
 1. Identify the changed-risk surface from the task, diff summary, or changed files.
-2. Prefer the smallest command set that can validate the changed behavior.
+2. Prefer the smallest command set that can validate the changed behaviour.
 3. Reuse the Planner's verification plan when available.
 4. Include manual smoke verification only when automation is unavailable or insufficient.
 
@@ -69,7 +69,7 @@ Prefer this order:
 1. narrow changed-scope tests
 2. lint / typecheck if relevant to the stack
 3. build if the change can affect compilation or bundling
-4. targeted smoke flow for user-visible or integration behavior
+4. targeted smoke flow for user-visible or integration behaviour
 
 Rules:
 

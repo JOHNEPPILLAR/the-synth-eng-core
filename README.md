@@ -193,7 +193,7 @@ Planning now follows explicit structure instead of ad hoc step lists.
 
 ### Tracks
 
-- `Quick Change` — localized low-ambiguity work
+- `Quick Change` — localised low-ambiguity work
 - `Feature Track` — medium work with a few moving parts
 - `System Track` — architecture, integration, or multi-surface work
 
@@ -210,7 +210,7 @@ Planning now follows explicit structure instead of ad hoc step lists.
 - `Memory Update`
 - `Multi-Hive Decision`
 - `Gaps and Proposed Defaults`
-- `Documentation Artifacts` for larger system work
+- the `Documentation Artifacts` section for larger system work
 
 ### Readiness gate
 
@@ -226,7 +226,7 @@ If not, the plan must return `Implementation Readiness: BLOCKED`.
 
 ### Plan delta
 
-If scope changes after a plan already exists, the preferred behavior is a `Plan Delta`:
+If scope changes after a plan already exists, the preferred behaviour is a `Plan Delta`:
 
 - what changed
 - what remains valid
@@ -244,9 +244,9 @@ flowchart TD
     T --> F["Feature Track"]
     T --> SY["System Track"]
 
-    Q --> D1["Localized steps + verification"]
+    Q --> D1["Localised steps + verification"]
     F --> D2["Feature slices + dependencies + risks"]
-    SY --> D3["Epics + features + artifacts + dependencies"]
+    SY --> D3["Epics + features + artefacts + dependencies"]
 
     D1 --> G["Gaps / defaults check"]
     D2 --> G
@@ -277,7 +277,7 @@ flowchart TD
 
 Routing rule:
 
-- if the request is ambiguous, requires architectural judgment, needs decomposition, or is not implementation-ready, `Orchestrator` must hand off to `Planner` instead of framing the problem itself
+- if the request is ambiguous, requires architectural judgement, needs decomposition, or is not implementation-ready, `Orchestrator` must hand off to `Planner` instead of framing the problem itself
 
 ### Review paths
 
@@ -306,7 +306,7 @@ Do not use `/delegate` for trivial microtasks.
 
 Skills in this repo are internal operational guides, not public menu items.
 
-For a concise catalog of available skills and when to use each one, see
+For a concise catalogue of available skills and when to use each one, see
 [`./skills/README.md`](skills/README.md).
 
 Important skills:
@@ -316,7 +316,7 @@ Important skills:
 - `skills/memory-management/SKILL.md:1` — durable vs session memory rules
 - `skills/git-worktree/SKILL.md:1` — filesystem isolation for parallel work
 - `skills/review-core/SKILL.md:1` — shared review contract
-- `skills/review-orchestration/SKILL.md:1` — independent review gate, review routing, and optimization follow-up
+- `skills/review-orchestration/SKILL.md:1` — independent review gate, review routing, and optimisation follow-up
 - `skills/multi-model-review/SKILL.md:1` — consensus-based multi-model finding consolidation
 
 Default rule: skills should generally remain hidden with `user-invocable: false`.
@@ -387,7 +387,7 @@ They can be combined.
 If you clone this repository into another project:
 
 1. keep `.agent-memory/*.md` as templates initially
-2. customize agent instructions for your repo structure and tooling
+2. customise agent instructions for your repo structure and tooling
 3. expose only the agents you want users to call directly
 4. keep internal workers and skills hidden by default
 5. tune planning tracks and review thresholds for your project size

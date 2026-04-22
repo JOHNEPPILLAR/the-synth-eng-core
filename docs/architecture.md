@@ -7,7 +7,7 @@ This document explains what the The Synthetic Engineer core repo does, how the m
 The repository is a control plane for VS Code agent workflows. It provides:
 
 - user-facing coordination through `Orchestrator` and `Planner`
-- specialized hidden execution agents for coding, review, debugging, and verification
+- specialised hidden execution agents for coding, review, debugging, and verification
 - reusable operational skills that define planning, review, memory, and worktree policy
 - durable repo memory templates under `.agent-memory/`
 - the `Pandora's Box` MCP server for external engineering context from Confluence and GitHub
@@ -124,7 +124,7 @@ sequenceDiagram
         P->>E: optional discovery
         E-->>P: findings
         P-->>O: execution-ready plan or blocked status
-    else localized execution-ready task
+    else localised execution-ready task
         O->>X: direct execution routing
     end
 
@@ -154,7 +154,7 @@ This separation prevents a single prompt from quietly becoming planner, implemen
 
 Planning has three explicit tracks:
 
-- `Quick Change`: small, localized work
+- `Quick Change`: small, localised work
 - `Feature Track`: medium complexity work with a few moving parts
 - `System Track`: architecture, integration, or multi-surface work
 
@@ -253,9 +253,9 @@ Preferred retrieval order:
 3. `context7` for external library and framework documentation
 4. generic web fetch only for non-repository, non-library pages
 
-## What the System Optimizes For
+## What the System Optimises For
 
-The design optimizes for:
+The design optimises for:
 
 - explicit ownership boundaries
 - clear readiness before execution
@@ -264,7 +264,7 @@ The design optimizes for:
 - scalable delegation using worktrees and hidden specialists
 - structured external retrieval through Pandora's Box
 
-It does not optimize for:
+It does not optimise for:
 
 - fully autonomous uncontrolled agent fan-out
 - implicit tool usage without governance

@@ -33,7 +33,7 @@ purpose: "Durable project decisions and invariants. Template file for downstream
 
 ## Onboarding Snapshot Template
 
-Use this after project familiarization / onboarding runs:
+Use this after project familiarisation / onboarding runs:
 
 ```md
 ## Onboarding Snapshot — YYYY-MM-DD

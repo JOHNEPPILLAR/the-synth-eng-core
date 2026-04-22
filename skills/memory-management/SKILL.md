@@ -33,12 +33,12 @@ This skill defines the rules for interacting with the `.agent-memory/` directory
 
 ---
 
-## 3. Durable vs Runtime Artifacts
+## 3. Durable vs Runtime Artefacts
 
 - Temporary execution notes, brainstorm pads, command scratchpads, and transient reports do NOT belong in `.agent-memory/`.
-- Put transient state in runtime files such as `/.tmp/`, session memory, task-local notes, or other execution artifacts.
+- Put transient state in runtime files such as `/.tmp/`, session memory, task-local notes, or other execution artefacts.
 - If a detail is only useful for the current run, keep it out of durable memory.
-- Planning artifacts such as draft epics, tentative feature breakdowns, and plan deltas stay in session memory unless they harden into durable operating rules, architecture decisions, or recurring constraints.
+- Planning artefacts such as draft epics, tentative feature breakdowns, and plan deltas stay in session memory unless they harden into durable operating rules, architecture decisions, or recurring constraints.
 
 ---
 
@@ -90,7 +90,7 @@ Prefer this shape for durable decisions:
 
 ### Onboarding Snapshot
 
-For onboarding / project familiarization runs, append a compact baseline snapshot:
+For onboarding / project familiarisation runs, append a compact baseline snapshot:
 
 ```md
 ## Onboarding Snapshot — YYYY-MM-DD
@@ -137,7 +137,7 @@ Prefer this shape for recurring issues:
 ## 6. Conflict Resolution (Multi-Hive)
 
 - In Multi-Hive mode, always work on the local branch copy.
-- If a merge conflict occurs in memory files, prioritize the most descriptive and recent information.
+- If a merge conflict occurs in memory files, prioritise the most descriptive and recent information.
 - Use bullet points to list alternative approaches if consensus is not possible.
 - Use `/delegate` and background sessions for execution isolation, not as a substitute for durable memory writes.
 
@@ -149,7 +149,7 @@ After any non-trivial feature, bugfix, refactor, onboarding scan, review-driven 
 
 1. Update the relevant durable memory file(s).
 2. Run this checklist:
-   - update `project_decisions.md` if there is a new invariant, decision, onboarding snapshot, or behavior change worth keeping
+  - update `project_decisions.md` if there is a new invariant, decision, onboarding snapshot, or behaviour change worth keeping
    - update `error_patterns.md` if the run exposed a repeatable failure mode with a clear fix and prevention guardrail
    - keep only durable knowledge; move scratch notes, temporary plans, and verbose reports out of `.agent-memory/`
    - separate `Facts` from `Inferences` when the statement is not fully verified from the repo
@@ -212,13 +212,13 @@ Require a memory update when at least one is true:
 1. architectural decision or invariant changed
 2. recurring bug/anti-pattern with fix and prevention was confirmed
 3. a verified bug fix produced a durable lesson
-4. feature or behavior changed in a way future agents should know
+4. feature or behaviour changed in a way future agents should know
 5. `>= 2` files changed or the refactor was non-trivial
 6. review produced a durable repo rule-of-thumb
 7. CI/build/test gating changed
 8. dependency change affects maintenance or risk
 9. the user explicitly asked to persist the outcome
-10. onboarding or project familiarization occurred
+10. onboarding or project familiarisation occurred
 
 Skip durable memory only for mechanical, low-risk, trivial work.
 

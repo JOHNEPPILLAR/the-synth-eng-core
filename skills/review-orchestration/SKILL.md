@@ -1,6 +1,6 @@
 ---
 name: review-orchestration
-description: Review routing, independent post-implementation review gates, multi-model escalation, and targeted optimization follow-up.
+description: Review routing, independent post-implementation review gates, multi-model escalation, and targeted optimisation follow-up.
 user-invocable: false
 ---
 
@@ -16,7 +16,7 @@ This skill governs:
 2. when review may be skipped
 3. single-model vs multi-model review selection
 4. how to route findings back into execution
-5. when a targeted optimization pass is justified
+5. when a targeted optimisation pass is justified
 
 It does NOT replace:
 
@@ -33,7 +33,7 @@ Default rule:
 
 Review is usually required when any are true:
 
-1. behavior changed
+1. behaviour changed
 2. `>= 2` files changed
 3. tests were added or updated
 4. shared utilities, public APIs, persistence, config, auth, or security-sensitive code changed
@@ -44,8 +44,8 @@ Review is usually required when any are true:
 Review may be skipped only when all are true:
 
 1. the change is trivial and mechanical
-2. scope is localized to one file or one clearly isolated config surface
-3. no behavior, API, persistence, security, or performance expectation changed
+2. scope is localised to one file or one clearly isolated config surface
+3. no behaviour, API, persistence, security, or performance expectation changed
 4. there is no meaningful regression risk
 
 If review is skipped, say why explicitly in the final report.
@@ -56,8 +56,8 @@ Use single-model review by default.
 
 Use multi-model review when any are true:
 
-1. authentication, authorization, payments, secrets, or PII handling changed
-2. data persistence, migrations, or compatibility behavior changed
+1. authentication, authorisation, payments, secrets, or PII handling changed
+2. data persistence, migrations, or compatibility behaviour changed
 3. shared infrastructure or core cross-cutting utilities changed
 4. change volume is large (`>5` files or roughly `>200` changed lines)
 5. the user explicitly asked for a deep audit
@@ -100,23 +100,23 @@ If review returns no significant issues:
 1. proceed to independent verification
 2. close the task only after verification passes or a justified skip/override exists
 
-## 7. Optimization Follow-Up
+## 7. Optimisation Follow-Up
 
-Optimization is not a mandatory polishing pass.
+Optimisation is not a mandatory polishing pass.
 
-Use a targeted optimization follow-up only when at least one is true:
+Use a targeted optimisation follow-up only when at least one is true:
 
 1. the review flags maintainability debt that meaningfully affects future changes
 2. the review flags measurable performance concerns
 3. the review flags obvious complexity, duplication, or test fragility introduced by the change
-4. the user explicitly asks for cleanup or optimization
+4. the user explicitly asks for cleanup or optimisation
 
 Rules:
 
-1. optimization must be grounded in review findings or explicit user intent
+1. optimisation must be grounded in review findings or explicit user intent
 2. do not run speculative cleanup loops after every feature
-3. after optimization, run a short independent re-review unless the changes are trivially local
-4. after review and any justified optimization follow-up, hand off to `Verifier` for objective acceptance checks
+3. after optimisation, run a short independent re-review unless the changes are trivially local
+4. after review and any justified optimisation follow-up, hand off to `Verifier` for objective acceptance checks
 
 ## 8. Output Expectations for Orchestrator
 
@@ -125,7 +125,7 @@ The Orchestrator should keep only these decisions locally:
 1. review required or justified skip
 2. single-model or multi-model
 3. executor chosen for follow-up fixes
-4. whether targeted optimization is warranted
+4. whether targeted optimisation is warranted
 5. whether the task is ready for `Verifier`
 
 Detailed review workflow policy belongs in this skill, not in the Orchestrator prompt.

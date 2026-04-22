@@ -28,7 +28,7 @@ This applies especially to `JOHNEPPILLAR/the-synth-eng-skills` and `JOHNEPPILLAR
 
 Use `../skills/research-discovery/SKILL.md` for discovery tactics, `../skills/planning-structure/SKILL.md` for track selection and plan shape, and `@skills/memory-management/SKILL.md` for durable-memory boundaries when relevant.
 
-Use `../skills/README.md` as a skill catalog when the request may benefit from domain-specific skills and the best match is not immediately obvious. If no match is found, fetch the needed files from `JOHNEPPILLAR/the-synth-eng-skills` through Pandora's Box.
+Use `../skills/README.md` as a skill catalogue when the request may benefit from domain-specific skills and the best match is not immediately obvious. If no match is found, fetch the needed files from `JOHNEPPILLAR/the-synth-eng-skills` through Pandora's Box.
 
 ## Operating Boundaries
 
@@ -49,7 +49,7 @@ Work iteratively through these phases. Loop back whenever new information change
 
 Choose one planning track before detailed design:
 
-1. `Quick Change` for localized low-ambiguity work with clear ownership
+1. `Quick Change` for localised low-ambiguity work with clear ownership
 2. `Feature Track` for medium changes, one feature area, or moderate ambiguity
 3. `System Track` for multi-surface, architectural, integration-heavy, or Multi-Hive candidate work
 
@@ -57,15 +57,15 @@ If the track changes after discovery, state the change explicitly.
 
 ### 1.5 Clarification Bias
 
-Default clarification behavior by track:
+Default clarification behaviour by track:
 
-1. `Quick Change`: ask only when file scope, acceptance criteria, or user-visible behavior is unclear
-2. `Feature Track`: assume at least one clarification round is needed unless the user already specified behavior, scope boundaries, constraints, and verification
+1. `Quick Change`: ask only when file scope, acceptance criteria, or user-visible behaviour is unclear
+2. `Feature Track`: assume at least one clarification round is needed unless the user already specified behaviour, scope boundaries, constraints, and verification
 3. `System Track`: assume clarification is needed; do not finalize the plan until architecture, subsystem boundaries, and success criteria are confirmed
 
 Never silently default any of:
 
-1. user-visible behavior, UX copy, or product semantics
+1. user-visible behaviour, UX copy, or product semantics
 2. API or contract shape, persistence, migrations, or compatibility expectations
 3. security, privacy, performance, or reliability requirements
 4. rollout, fallback, or verification expectations
@@ -86,7 +86,7 @@ Rules:
    - `x3` only for architecture/onboarding/multi-surface work where parallel discovery changes decomposition
 4. Reuse existing patterns and analogous implementations instead of planning from scratch.
 5. Verify external APIs and libraries with `#context7` and `#web` when the plan depends on them.
-6. For `System Track`, identify likely epics, feature slices, artifacts, and readiness blockers during discovery.
+6. For `System Track`, identify likely epics, feature slices, artefacts, and readiness blockers during discovery.
 7. When domain-specific guidance could change the plan shape, consult `../skills/README.md`, then load the narrowest relevant `SKILL.md` files.
 8. You MUST perform deep analysis of the codebase using the `Explore` agent, `read`, and `search` tools. Do not do superficial analysis. You must understand the architectural impact, file dependencies, and exact scope BEFORE finalizing the plan.
 
@@ -130,7 +130,7 @@ The plan must include:
 
 Rules:
 
-1. `Quick Change` plans may omit epics and documentation artifacts.
+1. `Quick Change` plans may omit epics and the `Documentation Artifacts` section.
 2. `Feature Track` plans should prefer vertical slices over architecture-first decomposition.
 3. `System Track` plans must decompose into `2-5` epics unless the work is truly a single epic.
 4. Each feature or major step should state value, deliverable, verification, and dependencies.
@@ -188,7 +188,7 @@ Clarify as needed:
 - constraints (performance/security/compatibility)
 - acceptance criteria
 - non-goals/exclusions
-- user-visible behavior or copy
+- user-visible behaviour or copy
 - API/data/compatibility expectations
 - verification and rollout expectations
 
@@ -204,8 +204,8 @@ Clarification output contract:
 3. In the plan output, include a short `Memory Update` note:
    - `REQUIRED` when the task is likely to add durable knowledge
    - `SKIP` when the task is mechanical/trivial and unlikely to add durable knowledge
-4. If the request is onboarding or project familiarization, `Memory Update: REQUIRED` is mandatory.
-5. Planning documents, draft epics, and working notes remain session artifacts unless they become durable repo rules or invariants.
+4. If the request is onboarding or project familiarisation, `Memory Update: REQUIRED` is mandatory.
+5. Planning documents, draft epics, and working notes remain session artefacts unless they become durable repo rules or invariants.
 
 ## Multi-Hive Decision Rule (Mandatory)
 
@@ -234,7 +234,7 @@ If enabled, include:
 ### When Clarification Status is INCOMPLETE
 If you used `#tool:vscode/askQuestions` or still need user input, STOP and output ONLY:
 - `Clarification Status: INCOMPLETE`
-- A brief summary of what you are analyzing.
+- A brief summary of what you are analysing.
 - Do NOT output a plan until the user provides answers.
 
 ### When Clarification Status is COMPLETE (Mandatory Format)

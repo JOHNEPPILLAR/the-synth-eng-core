@@ -10,4 +10,4 @@ This folder contains the durable reference docs for the The Synthetic Engineer c
 
 - maintainers who need to understand how the repo is structured
 - downstream teams adopting the control plane into another repository
-- contributors changing orchestration, review, verification, or MCP retrieval behavior
+- contributors changing orchestration, review, verification, or MCP retrieval behaviour

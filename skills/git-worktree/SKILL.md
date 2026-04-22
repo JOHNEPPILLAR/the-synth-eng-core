@@ -10,7 +10,7 @@ user-invocable: false
 
 Git worktree allows attaching **multiple working trees** to a single repository. Each worktree operates on its own branch independently, enabling true parallel development without stashing, switching, or risking merge conflicts in the working directory.
 
-In the context of this multi-agent workflow, worktrees are used **conditionally** — only when the standard file-ownership parallelization strategy is insufficient.
+In the context of this multi-agent workflow, worktrees are used **conditionally** — only when the standard file-ownership parallelisation strategy is insufficient.
 
 Use worktrees for **filesystem isolation** and `/delegate` for **session isolation**. They complement each other rather than replacing each other.
 
@@ -152,7 +152,7 @@ All worktrees share the same `.git` directory. This means:
 
 ### Submodules
 
-If the project uses submodules, they must be initialized separately in each worktree:
+If the project uses submodules, they must be initialised separately in each worktree:
 
 ```bash
 cd <worktree-path>
@@ -161,7 +161,7 @@ git submodule update --init --recursive
 
 ### Dependencies
 
-Each worktree has its own working tree — `node_modules`, build artifacts, virtual environments, etc. must be installed independently:
+Each worktree has its own working tree — `node_modules`, build artefacts, virtual environments, etc. must be installed independently:
 
 ```bash
 cd <worktree-path>

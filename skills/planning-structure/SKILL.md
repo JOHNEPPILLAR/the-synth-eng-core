@@ -13,7 +13,7 @@ Use this skill when producing or evaluating non-trivial implementation plans.
 Choose the smallest track that still manages risk:
 
 - **Quick Change**
-  - one localized change
+  - one localised change
   - clear owner and file scope
   - low ambiguity
   - little or no architecture impact
@@ -25,7 +25,7 @@ Choose the smallest track that still manages risk:
   - multi-surface work
   - architecture, workflow, data-model, or integration impact
   - cross-team or Multi-Hive candidate
-  - requires explicit artifact planning or a readiness gate
+  - requires explicit artefact planning or a readiness gate
 
 Default upward when scope uncertainty is high.
 
@@ -61,7 +61,7 @@ Use a layered structure:
 2. scope and exclusions
 3. epics
 4. features inside each epic
-5. documentation artifacts needed
+5. documentation required in the `Documentation Artifacts` section
 6. dependencies and sequencing
 7. risks and open gaps
 8. readiness gate
@@ -110,7 +110,7 @@ If the unresolved point changes architecture, security, or data correctness mate
 
 ## 6. Documentation Artifacts
 
-Only plan artifacts that materially reduce execution risk.
+Only plan material that materially reduces execution risk.
 
 Common candidates for `System Track`:
 
@@ -156,12 +156,12 @@ Treat planning as an interview loop, not a one-shot report.
 
 Use clarification aggressively when the unresolved point affects:
 
-1. user-visible behavior, UX copy, or product semantics
-2. API contracts, schema, persistence, migration, or compatibility behavior
+1. user-visible behaviour, UX copy, or product semantics
+2. API contracts, schema, persistence, migration, or compatibility behaviour
 3. security, privacy, performance, or reliability expectations
 4. verification, rollout, fallback, or non-goal boundaries
 
-Default clarification behavior by track:
+Default clarification behaviour by track:
 
 1. `Quick Change`: ask only when scope or acceptance criteria are not clear
 2. `Feature Track`: expect at least one clarification round unless the request is already explicit
@@ -175,6 +175,6 @@ Avoid:
 
 - giant flat task lists with no value grouping
 - steps with no deliverable or no verification
-- architecture artifacts for small/local changes
+- architecture artefacts for small/local changes
 - hiding unresolved critical gaps inside assumptions
 - re-planning from zero when a plan delta is enough

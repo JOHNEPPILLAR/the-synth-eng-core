@@ -55,7 +55,7 @@ go build ./cmd/pandoras-box
 
 ## Smoke Test
 
-Run a lightweight MCP integration check that initializes the server, verifies tool discovery, and calls key tools.
+Run a lightweight MCP integration check that initialises the server, verifies tool discovery, and calls key tools.
 
 ```bash
 go run ./cmd/pandoras-box-smoke
