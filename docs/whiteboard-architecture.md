@@ -31,6 +31,7 @@ The biggest challenges in building a system like the Synthetic Engineer are not 
 * Using the best leading reasioning LLMs in systems design and coding
 * Extreamly high-quality content aviable for context via the MCP sources
 * Software tasks can be decomposed into smaller, testable units which allows the planner and orchestrator to break work down and validate progress incrementally.
+* Referance implemention can be done using GitHub copilot
 
 ## Foundational Principles That Guide the System
 
