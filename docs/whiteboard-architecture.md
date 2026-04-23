@@ -1,329 +1,623 @@
 
 # Whiteboard Architecture
 
-## Core Position
+## Objective
 
-The Synthetic Engineer is designed as a governed autonomous software factory, not just an LLM with tool access.
+Design an autonomous agentic system capable of building software projects end-to-end from a high-level human brief, such as:
 
-## Can a one prompt 100% autonomous agentic system create an enterprise grade solution along with code?
+“Build a high-performance web search engine using Go and TypeScript, optimized for low latency.”
+
+The system must independently perform:
+    Discovery
+    Planning
+    Implementation
+    Validation
+    Delivery
+
+Human involvement is limited to:
+    Initial requirement input
+    Final review
+
+## Can a one prompt end-to-end autonomous agentic system create an enterprise grade solution along with code?
 
 The short answer is no.
 
 The long answer:
 
-It’s not realistically implementable end-to-end with current LLMs and tooling because the system requires reliable long-horizon reasoning, grounded decision-making and trustworthy self-evaluation, which today’s models don’t consistently provide. LLMs can generate code and plans, but they struggle to maintain coherent intent across multi-step workflows, especially when requirements are ambiguous or evolve. Tooling like MCP solves access to context, not context quality, trust or correctness. So the agent can easily base decisions on stale or conflicting information. Most critically, “LLM-as-a-judge” and self-validation loops are still correlated and fallible. The same model family often generates, tests, and evaluates outputs, leading to false confidence rather than true correctness. Without robust, deterministic validation, strong isolation, and human oversight at key decision points, the system would be brittle, unsafe and prone to confidently producing the wrong software.
+The biggest challenges in building a system like the Synthetic Engineer are not centred on generating code; they are centred on making it reliable, autonomous and trustworthy end-to-end. You are taking vague human input and turning it into a structured plan, which means handling ambiguity, conflicting requirements and missing information without constant human intervention. Then you have to ground that plan in real-world context from sources such as documentation and repositories, which may be noisy, outdated or contradictory. From there, coordinating multiple agents to produce consistent, production-quality code is non-trivial, especially across longer workflows where drift and inconsistencies can emerge. The hardest part is building a genuine self-correcting loop: being able to diagnose whether a failure comes from requirements, planning, implementation or the environment and then correct the right layer rather than merely retrying. On top of that, validating everything through actual execution, using LLMs as judges without introducing bias and maintaining full traceability back to the original requirements are all critical to building trust. Finally, there are practical concerns such as cost, latency and reproducibility, alongside the need to ensure safety and governance. Overall, the challenge is less about intelligence in isolation and more about orchestrating a robust system that can operate autonomously in messy, real-world conditions while still producing something a human can confidently approve.
 
-## The System Must Do
+## Key Assumptions
+* Cost and time is not a restraint
+* Using the best leading reasioning LLMs in systems design and coding
+* Extreamly high-quality content aviable for context via the MCP sources
+* Software tasks can be decomposed into smaller, testable units which allows the planner and orchestrator to break work down and validate progress incrementally.
 
-At a high level, the system needs to:
+## Foundational Principles That Guide the System
 
-- turn ambiguous human intent into a clear engineering contract
-- gather and rank context from trusted sources
-- plan work before implementation begins
-- execute changes in isolation
-- validate outcomes with evidence, not confidence
-- recover safely when validation fails
-- return control to a human at the right decision points
+### Autonomous by Default
 
-## System Context
+The system operates without requiring human intervention during execution. It progresses independently unless it encounters a critical failure condition.
+
+### Decisions Are Logged, Not Blocked
+
+When uncertainty arises, the system makes informed assumptions and records them, rather than stopping progress.
+
+### Real Execution Is the Source of Truth
+
+All outputs must be validated through actual execution, testing, and measurement—never just reasoning.
+
+### Failures Are Diagnosed, Not Retried Blindly
+
+Every failure is analyzed to determine its root cause and routed to the correct subsystem for correction.
+
+### Full Traceability Is Required
+
+Every requirement must be provably linked to code, tests, and validation results.
+
+## The Complete End-to-End Workflow
+* Human provides initial brief
+* Human Steering Intent (HSI) converts it into structured requirements
+* Discovery Engine gathers context and insights
+* Planner creates an execution strategy
+* Builder Agents implement the system
+* Execution layer validates outputs
+* Self-Correcting Feedback Loop (SCFL) corrects any failures
+* LLM-as-a-Judge System (LAJ) evaluates quality and compliance
+* Requirements Traceability Graph (RTG) verifies requirement coverage
+* Delivery pipeline packages the system
+* Human performs final review
+
+## The Architecture - High Level
 
 ```mermaid
-flowchart TD
+flowchart LR
 
-    A["Human Input<br/>Requirements / Feedback"] --> B["Requirement Interpreter<br/>Intent parsing<br/>Ambiguity detection<br/>Acceptance criteria"]
+    %% =========================
+    %% HUMAN
+    %% =========================
+    H[Human<br/>Initial Brief<br/>Final Review]
 
-    B --> C["Orchestrator state machine<br/>Task planning<br/>Phase control<br/>Retry and rollback<br/>Audit and memory"]
+    %% =========================
+    %% CORE SYSTEM
+    %% =========================
+    subgraph SYNTH["Synthetic Engineer"]
 
-    C --> D["Context Layer via MCP<br/>Confluence<br/>Git repos<br/>Local files<br/>APIs<br/>Ranked by trust and relevance"]
+        HSI["Human Steering Service<br/>Intent + Ambiguity + Assumptions"]
 
-    C --> E["Planning Layer<br/>Architecture design<br/>Task DAG<br/>Test strategy<br/>Benchmark plan"]
+        DISC["Discovery Service<br/>Context + Patterns + Risks"]
 
-    D --> E
+        PLAN["Planning Service<br/>Architecture + Tasks"]
 
-    E --> F["Execution Layer<br/>Code generation<br/>Refactoring<br/>Test generation<br/>Docs"]
+        ORCH["Execution Orchestrator<br/>Autonomous Control + Remediation"]
 
-    F --> G["Verification Layer<br/>Compile / lint<br/>Unit and integration tests<br/>Runtime execution<br/>Benchmarks<br/>Security scans<br/>LLM as judge"]
+        BUILD["Builder Agents<br/>Code + Tests + Integration"]
 
-    G --> H{"Validation passed?"}
+        EXEC["Execution & Validation<br/>Build + Run + Benchmark"]
 
-    H -->|No| I["Recovery Loop<br/>Diagnose failures<br/>Generate fixes<br/>Retry bounded"]
+        JUDGE["LLM Judge Service<br/>Quality + Requirements + Performance"]
 
-    I --> F
+        TRACE["Traceability Store<br/>Requirements ↔ Code ↔ Tests"]
 
-    H -->|Yes| J["Delivery Layer<br/>PR or repo output<br/>Reports and summary<br/>Human review"]
+        CONTEXT["MCP Context Gateway<br/>Docs + Repos + Environment"]
 
-    C --> K["Project Memory Store<br/>Requirements<br/>Decisions<br/>Context provenance<br/>Failures and history"]
+        DELIVERY["Delivery Pipeline<br/>CI/CD + Deployment + Docs"]
+    end
 
-    K --> C
+    %% =========================
+    %% EXTERNAL SYSTEMS
+    %% =========================
+    CONFLUENCE[(Internal Docs)]
+    GIT[(Repositories)]
+    LOCAL[(Local Environment)]
+    CI[(CI/CD Platform)]
+    TARGET[(Deployment Target)]
+
+    %% =========================
+    %% MAIN FLOW
+    %% =========================
+    H --> HSI
+    HSI --> DISC
+    DISC --> PLAN
+    PLAN --> ORCH
+    ORCH --> BUILD
+    BUILD --> EXEC
+    EXEC --> DELIVERY
+    DELIVERY --> H
+
+    %% =========================
+    %% FEEDBACK LOOPS
+    %% =========================
+    EXEC --> ORCH
+    EXEC --> JUDGE
+    JUDGE --> ORCH
+
+    ORCH --> PLAN
+    ORCH --> BUILD
+
+    %% =========================
+    %% TRACEABILITY
+    %% =========================
+    HSI --> TRACE
+    PLAN --> TRACE
+    BUILD --> TRACE
+    EXEC --> TRACE
+    JUDGE --> TRACE
+
+    %% =========================
+    %% CONTEXT INTEGRATION
+    %% =========================
+    CONTEXT --> HSI
+    CONTEXT --> DISC
+    CONTEXT --> PLAN
+    CONTEXT --> BUILD
+
+    CONTEXT --> CONFLUENCE
+    CONTEXT --> GIT
+    CONTEXT --> LOCAL
+
+    %% =========================
+    %% DELIVERY TARGETS
+    %% =========================
+    DELIVERY --> CI
+    DELIVERY --> TARGET
 ```
 
-## Flow Walkthrough
+## The Architecture - Detailed View
+
+```mermaid
+flowchart TB
+
+    %% Styles
+    classDef human fill:#f3f4f6,stroke:#334155,stroke-width:1.5px,color:#111827
+    classDef core fill:#eff6ff,stroke:#2563eb,stroke-width:1.5px,color:#1e3a8a
+    classDef process fill:#f0fdf4,stroke:#16a34a,stroke-width:1.5px,color:#14532d
+    classDef build fill:#fff7ed,stroke:#ea580c,stroke-width:1.5px,color:#9a3412
+    classDef validate fill:#ecfeff,stroke:#0891b2,stroke-width:1.5px,color:#164e63
+    classDef corrective fill:#fef2f2,stroke:#dc2626,stroke-width:1.5px,color:#7f1d1d
+    classDef judge fill:#f5f3ff,stroke:#7c3aed,stroke-width:1.5px,color:#4c1d95
+    classDef trace fill:#fffbeb,stroke:#d97706,stroke-width:1.5px,color:#78350f
+    classDef delivery fill:#eef2ff,stroke:#4f46e5,stroke-width:1.5px,color:#312e81
+    classDef foundation fill:#f8fafc,stroke:#64748b,stroke-width:1.2px,color:#0f172a
+    classDef stop fill:#fff1f2,stroke:#e11d48,stroke-width:1.5px,color:#881337
+
+    H["Human Brief
+    Build a high-performance web search engine
+    using Go and TypeScript
+    optimized for low latency"]:::human
+
+    subgraph AEM["Autonomous Execution Mode"]
+        direction LR
+
+        HSI["Human Steering Interpreter
+        - intent parsing
+        - sentiment analysis
+        - ambiguity detection
+        - conflict detection
+        - confidence scoring
+
+        Output:
+        requirement contract
+        contradiction map
+        assumption ledger entries"]:::core
+
+        DISC["Discovery Engine
+        - repo reconnaissance
+        - pattern and library analysis
+        - benchmark discovery
+        - risk and unknowns identification
+
+        Output:
+        discovery report"]:::core
+
+        PLAN["Planning System
+        - architecture selection
+        - task decomposition
+        - dependency ordering
+        - success criteria and validation hooks
+
+        Output:
+        execution plan"]:::process
+
+        BUILD["Builder Agents
+        - code generation
+        - refactoring
+        - test generation
+        - integration
+
+        Output:
+        code, tests, configs, docs"]:::build
+
+        EXEC["Execution and Validation Layer
+        - build and compilation
+        - unit and integration tests
+        - performance benchmarks
+        - static analysis and linters
+
+        Output:
+        execution results, metrics, artifacts"]:::validate
+    end
+
+    H --> HSI --> DISC --> PLAN --> BUILD --> EXEC
+
+    subgraph SCFL["Self-Correcting Feedback Loop"]
+        direction LR
+
+        FCE["Failure Classification Engine
+        - requirement issue
+        - planning issue
+        - implementation bug
+        - environment issue
+        - test instability"]:::corrective
+
+        ROUTE["Targeted remediation routing
+        - requirements to HSI
+        - planning to Planner
+        - code to Builder Agents
+        - environment to Environment Manager"]:::corrective
+    end
+
+    EXEC -->|failures or regressions| FCE
+    FCE --> ROUTE
+    ROUTE -.->|requirements| HSI
+    ROUTE -.->|planning| PLAN
+    ROUTE -.->|code| BUILD
+
+    subgraph LAJ["LLM-as-a-Judge System"]
+        direction LR
+        J1["Requirement Adherence Judge"]:::judge
+        J2["Code Quality Judge"]:::judge
+        J3["Performance Judge"]:::judge
+        J4["Security and Best Practices Judge"]:::judge
+    end
+
+    JR["Judgement Report
+    - scores
+    - findings
+    - recommendations
+    - threshold decisions"]:::judge
+
+    EXEC --> J1
+    EXEC --> J2
+    EXEC --> J3
+    EXEC --> J4
+    J1 --> JR
+    J2 --> JR
+    J3 --> JR
+    J4 --> JR
+    JR -.->|remediation if needed| FCE
+
+    RTG["Requirements Traceability Graph
+    requirements <-> plan tasks <-> code artifacts
+    <-> tests <-> benchmarks <-> judgements"]:::trace
+
+    HSI --> RTG
+    PLAN --> RTG
+    BUILD --> RTG
+    EXEC --> RTG
+    JR --> RTG
+
+    subgraph DELIV["End-to-End Delivery Pipeline"]
+        direction LR
+
+        SETUP["Project Setup
+        - repo scaffolding
+        - Go and TypeScript setup
+        - dependency initialization"]:::delivery
+
+        CICD["CI/CD Pipeline
+        - automated builds
+        - test automation
+        - linting and formatting
+        - benchmark harness"]:::delivery
+
+        DEPLOY["Deployment Support
+        - local run configuration
+        - optional cloud config
+        - environment templates"]:::delivery
+
+        OUT["Final Outputs
+        - working repository
+        - CI/CD config
+        - deployment instructions
+        - benchmark results
+        - documentation
+        - traceability report"]:::delivery
+    end
+
+    EXEC --> SETUP
+    SETUP --> CICD --> DEPLOY --> OUT
+
+    REVIEW["Final Human Review"]:::human
+    OUT --> REVIEW
+
+    subgraph FOUND["Cross-Cutting Foundations"]
+        direction TB
+
+        ASSUME["Assumption Ledger
+        records inferred decisions with confidence and impact"]:::foundation
+
+        CONTEXT["Context Integration via MCP and Conflict Resolution Layer
+        sources: Confluence, Git repos, local environment, external references"]:::foundation
+
+        POLICY["Security and Policy Guardrails
+        safety, compliance, access control"]:::foundation
+
+        OBS["Observability and Audit Logs
+        full run history, metrics, evidence trail"]:::foundation
+    end
+
+    CONTEXT -.->|context retrieval| DISC
+    CONTEXT -.->|standards and patterns| PLAN
+    ASSUME -.->|logged assumptions| HSI
+    ASSUME -.->|decision history| RTG
+    POLICY -.->|constraints| HSI
+    POLICY -.->|constraints| PLAN
+    OBS -.->|telemetry| EXEC
+    OBS -.->|failure evidence| FCE
+
+    STOP{"Hard-Stop Conditions
+    - irreconcilable requirement conflicts
+    - repeated failures beyond retry limits
+    - missing critical dependencies
+    - policy or safety violations"}:::stop
+
+    HSI -.->|low confidence or contradiction| STOP
+    FCE -.->|exhausted recovery| STOP
+    POLICY -.->|violation| STOP
+```
+
+## How the System Operates Without Human Intervention
+
+### Autonomous Execution Mode (AEM)
+
+The system runs in a fully autonomous mode where:
+* No intermediate approvals are required
+* Work continues even under ambiguity
+* Assumptions are recorded for transparency
 
-### Step 1: Requirements to contract
+### When the System Must Stop
+
+Execution halts only under specific “hard-stop” conditions:
+* Requirements are fundamentally contradictory and cannot be resolved
+* Repeated failures exceed retry limits
+* Critical dependencies are missing
+* A policy or safety constraint is violated
 
-"We start by converting the human brief into a structured contract: goals, constraints, assumptions, and measurable acceptance criteria. This is critical because vague inputs like 'high-performance' are otherwise ambiguous."
+### Assumption Ledger
+
+All inferred decisions are stored in an Assumption Ledger, including:
+* The assumption itself
+* Confidence level
+* Where it influenced the system
 
-### Step 2: Orchestrator as the control brain
+This ensures transparency without blocking progress.
 
-"At the centre is an orchestrator implemented as a state machine. It manages phases like planning, execution, validation, and recovery, and it maintains persistent project memory."
+## Interpreting Human Intent and Handling Ambiguity
 
-### Step 3: Context through MCP
+### Human Steering Interpreter (HSI)
 
-"We pull in external knowledge through MCP, including Confluence docs and Git repos, but we do not trust that context blindly. We rank it by freshness, authority, and relevance before using it."
+The HSI converts vague or incomplete human input into structured, actionable requirements.
 
-### Step 4: Planning layer
+### What It Handles
+* Extracting intent from natural language
+* Detecting ambiguity or missing information
+* Identifying conflicting requirements
+* Using sentiment to estimate confidence and urgency
+
+### How It Resolves Uncertainty
+* High confidence → automatically resolved
+* Medium confidence → assumed and logged
+* Low confidence → triggers a system halt
 
-"Before writing code, the system generates an architecture, a task DAG, a testing strategy, and a benchmark plan."
+### What It Produces
+* A structured Requirement Contract
+* A Contradiction Map
+* Confidence scores for each requirement
+* Entries in the Assumption Ledger
 
-### Step 5: Execution layer
+## Discovering Context Before Any Planning Begins
 
-"Workers generate code, tests, and documentation in isolated environments, typically using branch-based or sandboxed execution."
+### Discovery Engine
 
-### Step 6: Verification layer
+Before planning, the system performs a dedicated discovery phase to avoid uninformed decisions.
 
-"Validation is evidence-driven: compile and lint, unit and integration tests, runtime execution, performance benchmarks, security and static analysis, and only then LLM-as-a-judge."
+### What It Investigates
+* Existing repositories for patterns and conventions
+* Internal standards (e.g., Confluence documentation)
+* Available libraries and dependencies
+* Performance expectations (e.g., latency benchmarks)
+* Risks and unknowns
 
-### Step 7: Recovery loop
+### Where It Gets Information
 
-"Failures trigger a bounded retry loop where the system diagnoses issues, proposes fixes, and revalidates."
+Using Model Context Protocol (MCP) integrations, it pulls data from:
+* Internal documentation systems
+* Code repositories
+* Local development environments
+* External references
 
-### Step 8: Delivery and human review
+### What It Produces
 
-"Finally, the system outputs a PR and a report explaining decisions, tradeoffs, and evidence for correctness."
+A Discovery Report containing:
+* Constraints and requirements context
+* Candidate architectural approaches
+* Identified risks
+* Known unknowns
+* Initial assumptions
 
-## Reference Architecture
+This report becomes a required input to planning.
 
-[1] Human Brief + Steering
-    -> requirement parser
-    -> ambiguity / conflict detector
-    -> assumption ledger
-    -> approval gates
+## Resolving Conflicts Between Context Sources
 
-[2] Orchestrator / State Machine
-    -> manages phases, retries, budgets, branches, audit trail
+### Context Conflict Resolution Layer (CCRL)
 
-[3] Context Layer (via MCP)
-    -> Confluence standards
-    -> existing repos / patterns
-    -> local files / build configs
-    -> ticketing / docs / architecture records
-    -> provenance, freshness, and trust scoring
+Because multiple sources may disagree, the system includes a formal conflict resolution mechanism.
 
-[4] Planning Layer
-    -> system design
-    -> task graph
-    -> milestones
-    -> acceptance criteria
-    -> test and benchmark plan
+### How Conflicts Are Resolved
 
-[5] Execution Layer
-    -> codegen worker
-    -> refactor worker
-    -> test generation worker
-    -> docs worker
-    -> infra/setup worker
+Sources are ranked by:
+* Authority (organizational standards take precedence)
+* Freshness
+* Relevance
 
-[6] Verification Layer
-    -> compile / typecheck / lint
-    -> unit + integration tests
-    -> benchmark harness
-    -> static analysis / security / licence checks
-    -> LLM-as-a-judge review
+If conflicts occur:
+* Compatible information is merged
+* Otherwise, the highest-authority source is selected
+* The decision is logged in the Assumption Ledger
 
-[7] Recovery Layer
-    -> diagnose failure
-    -> propose fix
-    -> patch in isolated branch
-    -> re-run affected validations
+Low-confidence or unreliable context is discarded entirely.
 
-[8] Delivery Layer
-    -> PR / report / design summary / release notes
-    -> final human review
+## Turning Requirements into an Executable Plan
 
-## End-to-End Flow
+### Planning System
 
-### 1. Intake and contract formation
+The Planner converts requirements and discovery insights into a structured execution strategy.
 
-The first deliverable is not code. It is a structured contract that defines:
+### Responsibilities
+* Breaking down the problem into tasks
+* Selecting appropriate architecture
+* Ordering dependencies
+* Incorporating risk mitigation
 
-- goals
-- non-goals
-- constraints
-- tech stack
-- acceptance criteria
-- measurable SLAs
-- open assumptions
+### What It Produces
 
-This matters because prompts such as "build a high-performance web search engine" are too underspecified to execute safely.
+An Execution Plan that includes:
+* Task breakdown
+* Dependencies between tasks
+* Success criteria
+* Built-in validation checkpoints
 
-### 2. Context retrieval through MCP
+## Building the System Through Specialized Agents
 
-The system uses MCP servers to access standards, repos, and local environment data. MCP gives standardised access to resources and tools, but the host still decides how context is selected and incorporated.
+### Builder Agents
 
-Because of that, I would add a context-ranking layer on top of MCP based on:
+Execution is handled by specialised agents, each responsible for part of the system.
 
-- freshness
-- relevance
-- authority
-- project scope
+### Types of Agents
+* Code generation agents
+* Refactoring agents
+* Test generation agents
+* Integration agents
 
-### 3. Planning before implementation
+### How They Work
+* Implement incrementally
+* Continuously validate outputs
+* Align with both the plan and requirements
 
-Before any code is written, the planner should produce:
+## Ensuring Everything Works Through Real Execution
 
-- architecture options
-- dependency choices
-- task DAG
-- testing strategy
-- benchmark plan
-- escalation points
+### Execution and Validation Layer
 
-Implementation should not start until success can be expressed in measurable terms.
+All generated artifacts are validated through actual execution.
 
-### 4. Autonomous execution in sandboxes
+### What Is Verified
+* Code compiles successfully
+* Tests pass
+* Components integrate correctly
+* Performance meets expectations (e.g., latency targets)
+* Code quality standards are met
 
-Workers generate code in isolated branches or worktrees. Every change should be tied to:
+### Key Principle
 
-- the requirement it addresses
-- the evidence it depends on
-- the validation steps it must pass
+If it doesn’t run successfully, it is not considered complete.
 
-### 5. Verification and self-correction
+## Diagnosing and Fixing Problems Automatically
 
-The system validates itself with an evidence stack:
+### Self-Correcting Feedback Loop (SCFL)
 
-- compile / type / lint
-- unit and integration tests
-- runtime execution
-- performance benchmarks
-- static analysis and dependency checks
-- LLM semantic review
+The system continuously monitors for failures and corrects them.
 
-Only after failures are localised should the recovery loop attempt a patch.
+### Failure Classification Engine (FCE)
 
-### 6. Human review and delivery
+When something goes wrong, the system determines the root cause:
+* Requirement issue
+* Planning issue
+* Implementation bug
+* Environment/configuration problem
+* Test instability
 
-The human should come back into the loop with a concise handoff that explains:
+### How Fixes Are Applied
 
-- what was built
-- assumptions made
-- tradeoffs taken
-- evidence that it works
-- unresolved risks
+Each failure is routed to the correct subsystem:
+* Requirements → back to HSI
+* Planning → back to Planner
+* Code → back to Builder Agents
+* Environment → environment management
 
-## Main Design Risks And Mitigations
+### Key Improvement
 
-### 1. Ambiguous requirements
+## Fixes are targeted and intelligent—not simple retries.
 
-Issue: Intent parsing and sentiment analysis can help, but they do not create a reliable engineering spec.
+Evaluating Quality Using Independent AI Judges
 
-Risk: The agent builds the wrong thing with high confidence.
+### LLM-as-a-Judge System (LAJ)
 
-Mitigation: Force a contract-first step with measurable acceptance criteria and an assumption ledger.
+The system uses independent AI evaluators to assess output quality.
 
-### 2. Poor context quality
+### Types of Judges
+* Requirement adherence judge
+* Code quality judge
+* Performance judge
+* Security and best-practices judge
 
-Issue: MCP standardises access, not truth. Old Confluence pages or legacy repos may dominate decisions.
+### How Judging Works
 
-Risk: The agent copies stale patterns or contradictory standards.
+Each judge uses structured scoring criteria such as:
+* Completeness
+* Correctness
+* Alignment with requirements
+* Performance expectations
+* Decision Rules
+* All criteria must meet defined thresholds
+* Disagreements trigger an adjudication step
+* What It Produces
 
-Mitigation: Add provenance, recency, authority, and applicability scoring on retrieved context. MCP resources are explicitly application-driven, so this ranking layer belongs in the host.
+A Judgement Report tied directly to requirements.
 
-### 3. Unsafe tool autonomy
+## Proving That Requirements Are Fully Met
 
-Issue: The same system may read repos, run code, modify files, or call external services.
+### Requirements Traceability Graph (RTG)
 
-Risk: One bad decision becomes a real operational incident.
+The system maintains a graph linking requirements to all outputs.
+* What Is Connected
+* Requirements
+* Plan tasks
+* Code artifacts
+* Tests
+* Benchmarks
+* Judgement results
+* Why It Matters
+* Ensures nothing is missed
+* Provides auditability
+* Allows judges to verify full coverage
 
-Mitigation: Use least privilege, sandboxing, approval gates, replayable logs, and separate read/write policies. MCP guidance emphasises host-enforced security boundaries, capability negotiation, and user authorisation.
+## Delivering a Complete, Usable Software Project
 
-### 4. Long-horizon planning drift
+### End-to-End Delivery Pipeline
 
-Issue: Plans go stale as implementation changes.
+The system produces more than just code—it delivers a fully usable project.
 
-Risk: Subtasks optimise local progress while breaking global coherence.
+### What Is Included
 
-Mitigation: Use an event-driven orchestrator with replanning triggers, dependency tracking, and durable project state.
+#### Project Setup
+* Repository scaffolding
+* Language/runtime configuration
+* Dependency setup
 
-### 5. LLM-as-a-judge correlation failure
+#### CI/CD Pipeline
+* Automated builds
+* Test execution
+* Linting and formatting
+* Performance benchmarking
 
-Issue: If the same model family writes the code, writes the tests, and grades the result, failures are correlated.
+#### Deployment Support
+* Local execution setup
+* Optional cloud deployment configuration
 
-Risk: The system passes against its own misunderstandings.
-
-Mitigation: Use LLM judging only after deterministic checks and runtime evidence, and calibrate with human-reviewed evals instead of trusting judges blindly.
-
-### 6. Shallow self-validation
-
-Issue: The agent may optimise for "tests pass" instead of real correctness.
-
-Risk: It writes tests that confirm its own implementation.
-
-Mitigation: Separate requirement tests, regression tests, integration tests, and benchmarks. Require externally meaningful evidence.
-
-### 7. Fake performance claims
-
-Issue: "Low latency" depends on workload, concurrency, dataset, hardware, warmup, and p99 behaviour.
-
-Risk: The agent ships benchmark theater.
-
-Mitigation: Use a standardised performance harness, baseline comparisons, environment-controlled runs, and p95/p99 thresholds.
-
-### 8. Retry-loop thrashing
-
-Issue: Autonomous patch loops can oscillate between fixes and regressions.
-
-Risk: Tangled code and wasted compute.
-
-Mitigation: Use isolated branches, rollback points, capped retry budgets, and patch rationales before execution.
-
-### 9. Missing durable memory
-
-Issue: Chat context alone is not enough for multi-phase delivery.
-
-Risk: The system forgets why architectural decisions were made.
-
-Mitigation: Persist requirements, assumptions, evidence, failures, decisions, and benchmark history in a project state store.
-
-### 10. Human steering that is too weak or too noisy
-
-Issue: Too many interruptions kill autonomy, while too few create silent product decisions.
-
-Risk: You either get poor UX or misaligned output.
-
-Mitigation: Escalate only on high-uncertainty, high-impact, or irreversible decisions.
-
-##  Sentiment Analysis
-
-Sentiment analysis belongs in the system, but only as a supporting signal, not as a core controller.
-
-It is useful for detecting:
-
-- frustration
-- hesitation
-- hidden dissatisfaction
-- contradiction between stated intent and tone
-
-It should help decide when to escalate. It should not decide what to build or override explicit structured requirements.
-
-## MCP
-
-MCP is an interoperability layer, not a reasoning layer. It gives the system standardised access to resources and tools, with capability negotiation and host-managed security boundaries, but the host still needs policies for trust, ranking, permissions, and context selection.
-
-## Recommended Implementation Choices
-
-I would recommend:
-
-- one orchestrator with explicit state
-- specialised workers only where independent review adds value
-- sandboxed execution
-- branch-based retries
-- evidence-driven validation
-- human approval only at key decision gates
-
-I would avoid:
-
-- one giant prompt
-- fully unrestricted tool access
-- using LLM judgement as the primary quality gate
-- inferring requirements without traceability
+#### Final Outputs
+* Fully working repository
+* CI/CD configuration
+* Deployment instructions
+* Benchmark results
+* Documentation
+* Traceability report
