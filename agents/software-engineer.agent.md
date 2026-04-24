@@ -1,7 +1,7 @@
 ---
 name: SoftwareEngineer
 description: Writes code for small, low-risk changes and straightforward fixes.
-model: GPT-5.4 mini (copilot)
+model: Claude Haiku 4.5 (copilot)
 target: vscode
 user-invocable: false
 disable-model-invocation: true

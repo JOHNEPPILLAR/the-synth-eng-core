@@ -1,7 +1,7 @@
 ---
 name: PrincipalEngineer
 description: Writes code for complex, cross-cutting, or high-risk changes.
-model: GPT-5.3-Codex (copilot)
+model: Claude Sonnet 4.6 (copilot)
 target: vscode
 user-invocable: false
 disable-model-invocation: true
