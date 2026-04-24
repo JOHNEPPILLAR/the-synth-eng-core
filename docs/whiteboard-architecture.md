@@ -76,7 +76,7 @@ Every requirement must be provably linked to code, tests, and validation results
 * Delivery pipeline packages the system
 * Human performs final review
 
-## The Architecture - High Level
+## The Architecture - High Level Flow
 
 ```mermaid
 flowchart LR
@@ -171,7 +171,7 @@ flowchart LR
     DELIVERY --> TARGET
 ```
 
-## The Architecture - Detailed View
+## The Architecture - Interaction Flow
 
 ```mermaid
 flowchart TB
