@@ -17,6 +17,7 @@ If you want more than the short overview in this README, start with:
 
 - [docs/whiteboard-architecture.md](docs/whiteboard-architecture.md) - high-level architecture framing, feasibility constraints and systems thinking context
 - [docs/architecture.md](docs/architecture.md) - end-to-end architecture, runtime flow, memory model, review/verification pipeline and Pandora's Box integration
+- [docs/scaling-design.md](docs/scaling-design.md) - scaling strategy, likely bottlenecks, backpressure model and phased operational growth
 - [docs/README.md](docs/README.md) - documentation index
 
 ## 🔥 Features

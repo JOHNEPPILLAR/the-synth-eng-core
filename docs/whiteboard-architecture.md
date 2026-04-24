@@ -26,12 +26,20 @@ The long answer:
 
 The biggest challenges in building a system like the Synthetic Engineer are not centred on generating code; they are centred on making it reliable, autonomous and trustworthy end-to-end. You are taking vague human input and turning it into a structured plan, which means handling ambiguity, conflicting requirements and missing information without constant human intervention. Then you have to ground that plan in real-world context from sources such as documentation and repositories, which may be noisy, outdated or contradictory. From there, coordinating multiple agents to produce consistent, production-quality code is non-trivial, especially across longer workflows where drift and inconsistencies can emerge. The hardest part is building a genuine self-correcting loop: being able to diagnose whether a failure comes from requirements, planning, implementation or the environment and then correct the right layer rather than merely retrying. On top of that, validating everything through actual execution, using LLMs as judges without introducing bias and maintaining full traceability back to the original requirements are all critical to building trust. Finally, there are practical concerns such as cost, latency and reproducibility, alongside the need to ensure safety and governance. Overall, the challenge is less about intelligence in isolation and more about orchestrating a robust system that can operate autonomously in messy, real-world conditions while still producing something a human can confidently approve.
 
+The spec based approach to GenAI goes a long way in solving the challange however is not the complete answer.
+
 ## Key Assumptions
 * Cost and time is not a restraint
 * Using the best leading reasioning LLMs in systems design and coding
 * Extreamly high-quality content aviable for context via the MCP sources
 * Software tasks can be decomposed into smaller, testable units which allows the planner and orchestrator to break work down and validate progress incrementally.
 * Referance implemention can be done using GitHub copilot
+
+## Scaling Consoderations
+The architecture can scale, but only if it stops being implemented as one smart loop and becomes a distributed workflow system with explicit queues, state boundaries, worker pools, caches and degraded modes.
+
+The first bottlenecks will not be user traffic in the abstract. They will be centralised orchestration, repeated retrieval, model throughput, verification capacity and traceability write amplification. Designing around those from the start preserves the whiteboard principles while making the system operable at higher load.
+
 
 ## Foundational Principles That Guide the System
 
